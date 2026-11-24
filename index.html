@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Validation</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        form {
+            background: white;
+            width: 300px;
+            padding: 20px;
+            margin: 30px auto;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Registration Form</h2>
+
+<form id="registerForm">
+
+    <input type="text" id="name" placeholder="Enter Name">
+    <p class="error" id="nameError"></p>
+
+    <input type="text" id="regEmail" placeholder="Enter Email">
+    <p class="error" id="emailError"></p>
+
+    <input type="password" id="regPassword" placeholder="Enter Password">
+    <p class="error" id="passwordError"></p>
+
+    <input type="password" id="confirmPassword" placeholder="Confirm Password">
+    <p class="error" id="confirmError"></p>
+
+    <button type="submit">Register</button>
+
+    <p class="success" id="regSuccess"></p>
+
+</form>
+
+
+<h2>Login Form</h2>
+
+<form id="loginForm">
+
+    <input type="text" id="loginEmail" placeholder="Enter Email">
+    <p class="error" id="loginEmailError"></p>
+
+    <input type="password" id="loginPassword" placeholder="Enter Password">
+    <p class="error" id="loginPasswordError"></p>
+
+    <button type="submit">Login</button>
+
+    <p class="success" id="loginSuccess"></p>
+
+</form>
+
+
+<script>
+
+// Email validation function
+
+function validEmail(email) {
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+}
+
+
+// Registration form validation
+
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("regEmail").value.trim();
+    let password = document.getElementById("regPassword").value;
+    let confirm = document.getElementById("confirmPassword").value;
+
+    let valid = true;
+
+    // Clear old messages
+    document.querySelectorAll(".error").forEach(function(x) {
+        x.innerHTML = "";
+    });
+
+    document.getElementById("regSuccess").innerHTML = "";
+
+    // Name validation
+    if (name == "") {
+        document.getElementById("nameError").innerHTML = "Name is required";
+        valid = false;
+    }
+
+    // Email validation
+    if (email == "") {
+        document.getElementById("emailError").innerHTML = "Email is required";
+        valid = false;
+    }
+    else if (!validEmail(email)) {
+        document.getElementById("emailError").innerHTML = "Invalid email";
+        valid = false;
+    }
+
+    // Password validation
+    if (password == "") {
+        document.getElementById("passwordError").innerHTML = "Password is required";
+        valid = false;
+    }
+    else if (password.length < 8 ||
+             !/[A-Z]/.test(password) ||
+             !/[a-z]/.test(password) ||
+             !/[0-9]/.test(password)) {
+        document.getElementById("passwordError").innerHTML =
+        "Password needs 8 characters, uppercase, lowercase and number";
+        valid = false;
+    }
+
+    // Confirm password validation
+    if (confirm == "") {
+        document.getElementById("confirmError").innerHTML = "Confirm password";
+        valid = false;
+    }
+    else if (password != confirm) {
+        document.getElementById("confirmError").innerHTML = "Passwords do not match";
+        valid = false;
+    }
+
+    if (valid) {
+        document.getElementById("regSuccess").innerHTML =
+        "Registration Successful!";
+    }
+
+});
+
+
+// Login form validation
+
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let email = document.getElementById("loginEmail").value.trim();
+    let password = document.getElementById("loginPassword").value;
+
+    let valid = true;
+
+    document.getElementById("loginEmailError").innerHTML = "";
+    document.getElementById("loginPasswordError").innerHTML = "";
+    document.getElementById("loginSuccess").innerHTML = "";
+
+    // Email validation
+    if (email == "") {
+        document.getElementById("loginEmailError").innerHTML = "Email is required";
+        valid = false;
+    }
+    else if (!validEmail(email)) {
+        document.getElementById("loginEmailError").innerHTML = "Invalid email";
+        valid = false;
+    }
+
+    // Password validation
+    if (password == "") {
+        document.getElementById("loginPasswordError").innerHTML =
+        "Password is required";
+        valid = false;
+    }
+
+    if (valid) {
+        document.getElementById("loginSuccess").innerHTML =
+        "Login Successful!";
+    }
+
+});
+
+
+// Display messages dynamically while typing
+
+document.querySelectorAll("input").forEach(function(input) {
+    input.addEventListener("input", function() {
+        let error = document.getElementById(input.id + "Error");
+
+        if (error) {
+            error.innerHTML = "";
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>
